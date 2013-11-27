@@ -16,6 +16,7 @@ import net.sf.dynamicreports.report.builder.column.Columns;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
 import net.sf.dynamicreports.report.builder.component.Components;
 import net.sf.dynamicreports.report.builder.datatype.DataTypes;
+import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.PageOrientation;
 import net.sf.dynamicreports.report.constant.PageType;
 import net.sf.dynamicreports.report.exception.DRException;
@@ -51,10 +52,11 @@ public class DatabaseInfoReport extends ReportBuilder {
 		TextColumnBuilder<String> dbNameColumn = Columns.column("Database Name", dbNameField).setStyle(BtpnTemplates.columnStyle);
 		
 				
-		reportBuilder.addColumn(Columns.reportRowNumberColumn("No").setWidth(20));
+		reportBuilder.addColumn(Columns.reportRowNumberColumn("No").setWidth(20).setHorizontalAlignment(HorizontalAlignment.CENTER));
 		reportBuilder.addColumn(dbNameColumn);
 		reportBuilder.addColumn(Columns.column("Software Name", dbSoftwareNameField));
-		reportBuilder.addColumn(Columns.column("Software Version", dbSoftwareVersionField));
+		reportBuilder.addColumn(Columns.column("Software Version", dbSoftwareVersionField)
+				.setHorizontalAlignment(HorizontalAlignment.CENTER));
 		reportBuilder.addColumn(Columns.column("Server Hosting", serverHostingField));
 		
 		reportBuilder.addPageHeader(BtpnTemplates.createPageHeaderComponent(this.title));
@@ -63,6 +65,7 @@ public class DatabaseInfoReport extends ReportBuilder {
 		reportBuilder.setDataSource(new JRBeanCollectionDataSource(dataSource));
 		reportBuilder.sortBy(dbNameColumn);
 		reportBuilder.noData(BtpnTemplates.createNoDataComponent(this.title));
+		reportBuilder.addPageFooter(BtpnTemplates.footerComponent);
 				
 	}
 

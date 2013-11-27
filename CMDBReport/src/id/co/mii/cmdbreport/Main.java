@@ -51,6 +51,7 @@ public class Main {
 		String requestId = args[1];
 		
 		try {
+			log.debug("startNodeId : "+startNodeId+"\nrequestId : "+requestId);
 			prog.updateJobStatus(factory.getContext(), requestId, "In Progress");
 			instanceList = factory.walkTheGraph(startNodeId,4);
 			factory.classifyInstance(instanceList);			
@@ -63,25 +64,26 @@ public class Main {
 		//concatenate report
 		prog.updateJobStatus(factory.getContext(), requestId, "Creating PDF file");
 		JasperConcatenatedReportBuilder concatenatedReportBuilder = new JasperConcatenatedReportBuilder();
+		concatenatedReportBuilder.setContinuousPageNumbering(true);
 		concatenatedReportBuilder.concatenate(				
 				prog.createReport(new AppInfoReport(), factory.getApplicationInfos()),
 				prog.createReport(new ServerInfoReport(), factory.getServerList()),
 				prog.createReport(new DatabaseInfoReport(), factory.getDatabaseInfos()),
 				prog.createReport(new NetworkInfoReport(), factory.getNetworkInfos())
 				);
-		concatenatedReportBuilder.setContinuousPageNumbering(true);
+		
 		
 		try {
 			File file = new File(SystemProperties.getString("ARS.report.output")+"\\"+
 					factory.getBusinessService().getName()+"_report.pdf");
 			concatenatedReportBuilder.toPdf(new FileOutputStream(file));
 			log.info("Exporting  file : "+file.getAbsolutePath());
-//			prog.createAttachment(factory.getContext(), file,requestId);
+			prog.createAttachment(factory.getContext(), file,requestId);
 			
 		} catch (FileNotFoundException | DRException e) {
 			e.printStackTrace();
 		}
-		
+		log.info("Report completed.");
 	}
 	
 	private JasperReportBuilder createReport(ReportBuilder builder, List source){
@@ -121,7 +123,6 @@ public class Main {
 		try {
 			context.setEntry("BTPN:JobFormAPI", requestId, entry,new Timestamp(), Constants.AR_JOIN_SETOPTION_REF);
 		} catch (ARException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

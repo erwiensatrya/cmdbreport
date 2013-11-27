@@ -129,10 +129,10 @@ public class ServerInfoReport extends ReportBuilder {
 		reportBuilder.addColumn(col2);
 		reportBuilder.addColumn(col3);
 		reportBuilder.addPageHeader(BtpnTemplates.createPageHeaderComponent("Server Information"));
-		reportBuilder.addPageFooter(Components.pageXofY());
 		reportBuilder.setPageFormat(PageType.A4, PageOrientation.LANDSCAPE);
 		reportBuilder.setTemplate(BtpnTemplates.reportTemplate);
 		reportBuilder.setDataSource(new JRBeanCollectionDataSource(dataSource));
+		reportBuilder.addPageFooter(BtpnTemplates.footerComponent);
 //		reportBuilder.sortBy(new SortBuilder(hostnameField));
 		
 	}

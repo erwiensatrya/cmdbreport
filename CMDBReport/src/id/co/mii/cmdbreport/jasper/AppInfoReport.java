@@ -102,7 +102,7 @@ public class AppInfoReport extends ReportBuilder {
 		reportBuilder.addColumn(col1);
 		reportBuilder.setPageFormat(PageType.A4, PageOrientation.LANDSCAPE);
 		reportBuilder.setTemplate(Templates.reportTemplate);
-		reportBuilder.addPageFooter(Templates.footerComponent);
+		reportBuilder.addPageFooter(BtpnTemplates.footerComponent);
 		reportBuilder.addTitle(BtpnTemplates.createTitleComponent(bussServiceField));
 		reportBuilder.addPageHeader(BtpnTemplates.createPageHeaderComponent(this.title));
 		reportBuilder.setDataSource(new JRBeanCollectionDataSource(dataSource));

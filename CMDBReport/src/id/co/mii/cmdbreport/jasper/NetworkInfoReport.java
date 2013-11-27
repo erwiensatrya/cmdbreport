@@ -1,5 +1,6 @@
 package id.co.mii.cmdbreport.jasper;
 
+import net.sf.dynamicreports.examples.Templates;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.builder.DynamicReports;
 import net.sf.dynamicreports.report.builder.FieldBuilder;
@@ -50,6 +51,7 @@ public class NetworkInfoReport extends ReportBuilder {
 		reportBuilder.setDataSource(new JRBeanCollectionDataSource(dataSource));
 		reportBuilder.sortBy(hostnameColumn);
 		reportBuilder.noData(BtpnTemplates.createNoDataComponent(title));
+		reportBuilder.addPageFooter(BtpnTemplates.footerComponent);
 	}
 
 	@Override

@@ -249,7 +249,7 @@ public class CMDBReport {
 		state = CMDBUtil.CMDBGraphWalkBegin(context,classToFind,startNodeId,query);
 
 		CMDBInstanceList list = null;
-
+		
 		while(state.hasNext()){
 
 			output = CMDBUtil.CMDBGraphWalkNext(context, state);
@@ -314,13 +314,26 @@ public class CMDBReport {
 					}
 					appInfo.setApplicationIntegration(appIntgStr);
 				}
-
+				
+				CMDBInstanceList serverHostings = this.walkByComponent(appInst.getId(), Servant.BMC_COMPUTERSYSTEM, 
+						Servant.BMC_DEPENDENCY, CMDBGraphWalkRelation.CMDB_RELATIONSHIP_DIRECTION_OUT, 1);
+				if (!serverHostings.isEmpty()){
+					String serverHostingStr = "";
+					for (CMDBInstance serverHosting : serverHostings) {
+						CMDBInstance svr = this.searchItemById(serverHosting.getId(), Servant.BMC_COMPUTERSYSTEM);
+						serverHostingStr += "#"+svr.getAttributeValueByName("Name").getAttributeValue().toString()+" ";
+						String isVirtual = svr.getAttributeValueByName("isVirtual").getAttributeValue().toString();
+						if (svr.getAttributeValueByName("isVirtual").getAttributeValue().toString().equalsIgnoreCase("0"))
+							appInfo.addPhysicalServer();
+					}
+					appInfo.setServerHosting(serverHostingStr);
+				}
 				break;
 
 			case "BMC_ComputerSystem":
 				serverInfo = new ServerInfo();	
 				
-				System.out.println(cmdbInstance.getId()+" "+map.get("Name").getAttributeValue().toString());
+//				System.out.println(cmdbInstance.getId()+" "+map.get("Name").getAttributeValue().toString());
 				CMDBInstance csInstance = this.searchItemById(cmdbInstance.getId(), Servant.BMC_COMPUTERSYSTEM);
 				primaryCapability = csInstance.getAttributeValueByName("PrimaryCapability")
 						.getAttributeValue().getIntValue();
@@ -333,8 +346,8 @@ public class CMDBReport {
 					serverInfo.getMemories().add(ram);
 
 					serverInfo.setHostname(map.get("Name").getAttributeValue().toString());
-					tempHosting += "#"+serverInfo.getHostname()+" ";
-					appInfo.setServerHosting(tempHosting);
+//					tempHosting += "#"+serverInfo.getHostname()+" ";
+//					appInfo.setServerHosting(tempHosting);
 
 					//find serverAdmin
 					CMDBInstanceList persons = walkByComponent(csInstance.getId(), Servant.BMC_PERSON, Servant.BMC_DEPENDENCY, 
@@ -358,11 +371,9 @@ public class CMDBReport {
 					} catch (Exception en){
 						System.err.println("exception caught");						
 					} finally {
-						System.out.println("is Virtual "+strIsVm);
 						if (strIsVm.equalsIgnoreCase("1"))
 							serverInfo.setIsVirtualServer(Servant.YES);
 						else {
-							appInfo.addPhysicalServer();
 							serverInfo.setIsVirtualServer(Servant.NO);
 						}
 					}

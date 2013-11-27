@@ -112,7 +112,7 @@ import net.sf.dynamicreports.report.definition.ReportParameters;
 			btpnLogoComponent = cmp.horizontalList(
 					cmp.image("asset/logo_btpn.jpg").setFixedDimension(100, 80)).setFixedWidth(150);
 
-			footerComponent = cmp.pageXofY()
+			footerComponent = cmp.pageNumber()
 			                     .setStyle(
 			                     	stl.style(boldCenteredStyle)
 			                     	   .setTopBorder(stl.pen1Point()));
