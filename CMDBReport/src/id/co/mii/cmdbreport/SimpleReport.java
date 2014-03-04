@@ -47,8 +47,8 @@ public class SimpleReport {
 		SimpleReport sr = new SimpleReport();
 		SystemProperties.loadProperties("properties/cmdbreport.properties");
 		sr.createAppInfoReport();
-//		sr.createDbInfoReport();
-		sr.createSvrInfoReport();
+		sr.createDbInfoReport();
+//		sr.createSvrInfoReport();
 //		sr.createNetworkInfoReport();
 	}
 
@@ -91,8 +91,8 @@ public class SimpleReport {
 		db2.setDatabaseName("ABCDE");
 		
 		List<DatabaseInfo> dbInfos = new ArrayList<DatabaseInfo>();
-//		dbInfos.add(dbInfo);
-//		dbInfos.add(db2);
+		dbInfos.add(dbInfo);
+		dbInfos.add(db2);
 		
 		dbInfoReport.setDataSource(dbInfos);
 		dbInfoReport.build();
